@@ -6,7 +6,7 @@ import torch
 
 
 
-def get_dataloader(d = 2, r = 100, N = 500, batch_size = 500):
+def get_dataloader(d = 2, r = 100, N = 500, batch_size = 50):
     d = d # dimension of the data
     r = r # number of points to simulate my gaussian
     N = N # number of samples
