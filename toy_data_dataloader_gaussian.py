@@ -33,4 +33,5 @@ def get_dataloader(d = 2, r = 100, N = 500, batch_size = 50):
     dataset = MyDataset(X, C, Y)
     batch_size = batch_size
     dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
-    return dataloader
+    return dataloader, locs, scales
+
