@@ -20,26 +20,31 @@ class ICNNet(nn.Module):
 
         self.layers_v = nn.ModuleList([nn.Sequential(nn.Linear(context_layer_sizes[i], context_layer_sizes[i+1]), nn.ReLU()) for i in range(self.n_layers-1)])
         
-        # for layer in self.layers_z:
-        #     nn.init.ones_(layer.weight)
-        #     layer.weight.data *= 1/layer.weight.shape[1]
+        for layer in self.layers_z:
+            nn.init.xavier_uniform_(layer.weight)
 
-        # for layer in self.layers_zu:
-        #     nn.init.eye_(layer.weight)
-        #     nn.init.zeros_(layer.bias)
+        for seq_layer in self.layers_zu:
+            for layer in seq_layer:
+                if isinstance(layer, nn.Linear):  # check if the layer is Linear
+                    nn.init.xavier_uniform_(layer.weight)
+                    nn.init.zeros_(layer.bias)
 
-        # for layer in self.layers_x:
-        #     nn.init.zeros_(layer.weight)
-        #     nn.init_ones_(layer.bias)
+        for layer in self.layers_x:
+            nn.init.xavier_uniform_(layer.weight)
         
-        # for layer in self.layers_xu:
-        #     nn.init.zeros_(layer.weight)
+        for layer in self.layers_xu:
+            nn.init.xavier_uniform_(layer.weight)
+            nn.init.zeros_(layer.bias)
          
-        # for layer in self.layers_u:
-        #     nn.init.eye_(layer.weight)
+        for layer in self.layers_u:
+            nn.init.xavier_uniform_(layer.weight)
+            nn.init.zeros_(layer.bias)
         
-        # for layer in self.layers_v:
-        #     nn.init.eye_(layer.weight)
+        for seq_layer in self.layers_v:
+            for layer in seq_layer:
+                if isinstance(layer, nn.Linear):  # check if the layer is Linear
+                    nn.init.xavier_uniform_(layer.weight)
+                    nn.init.zeros_(layer.bias)
 
     def forward(self, x, c):
         input = x
