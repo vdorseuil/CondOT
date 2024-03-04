@@ -1,6 +1,5 @@
 from torch.utils.data import Dataset, DataLoader
 
-
 class MyDataset(Dataset):
     def __init__(self, X, C, Y):
         self.X = X
