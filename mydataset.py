@@ -20,19 +20,28 @@ def get_gaussian_dataset(dataset) :
     C = dataset.C
     Y = dataset.Y
 
+    X_gaussian = torch.ones_like(dataset.X)
+    C_gaussian = torch.ones_like(dataset.C)
+    Y_gaussian = torch.ones_like(dataset.Y)
+
     for i in range(X.shape[0]) :
         x_i = X[i]
         mean = torch.mean(x_i, dim = 0)
         cov_matrix = ((x_i-mean).T @ (x_i - mean)) / (x_i.shape[0] - 1)
-        X[i] = torch.tensor(multivariate_normal.rvs(mean=mean, cov=cov_matrix, size=x_i.shape[0]))
+        X_gaussian[i] = torch.tensor(multivariate_normal.rvs(mean=mean, cov=cov_matrix, size=x_i.shape[0]))
     
     for i in range(Y.shape[0]) :
         y_i = Y[i]
         mean = torch.mean(y_i, dim = 0)
         cov_matrix = ((y_i-mean).T @ (y_i - mean)) / (y_i.shape[0] - 1)
-        Y[i] = torch.tensor(multivariate_normal.rvs(mean=mean, cov=cov_matrix, size=y_i.shape[0]))
+        Y_gaussian[i] = torch.tensor(multivariate_normal.rvs(mean=mean, cov=cov_matrix, size=y_i.shape[0]))
     
-    return(dataset)
+    for i in range(C.shape[0]) :
+        C_gaussian[i] = C[i]
+
+    gaussian_dataset = MyDataset(X_gaussian, C_gaussian, Y_gaussian)
+    
+    return(gaussian_dataset)
 
 def get_gaussian_transport_dataset(gaussian_dataset) :
     X = gaussian_dataset.X

@@ -76,8 +76,8 @@ def train_makkuva(ICNNf, ICNNg, dataloader, epochs = 100, train_freq_g = 10):
     
 def train_makkuva_epoch(ICNNf, ICNNg, dataloader, train_freq_g = 10) :
     # Define the loss function and the optimizer
-    optimizer_f = optim.Adam(ICNNf.parameters(), lr = 0.0001)
-    optimizer_g = optim.Adam(ICNNg.parameters(), lr = 0.0001)
+    optimizer_f = optim.Adam(ICNNf.parameters(), lr = 0.001)
+    optimizer_g = optim.Adam(ICNNg.parameters(), lr = 0.001)
 
     sum_loss_g = 0
     cpt_g = 0
