@@ -23,7 +23,7 @@ def get_dataloader(d = 2, r = 100, N = 500, batch_size = 50):
     C = torch.stack((locs, scales), dim = 2)
 
     locs2D = locs.unsqueeze(-1).expand(-1, -1, d)
-    scales2D = scales.unsqueeze(-1).expand(-1, -1, d)
+    scales2D = 2*scales.unsqueeze(-1).expand(-1, -1, d)
 
     Y = torch.tensor(stats.norm.rvs(loc=locs2D, scale=scales2D, size=(N, r, d)), dtype=torch.float32)
 
