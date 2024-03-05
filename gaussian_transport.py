@@ -25,7 +25,7 @@ def t(A,b):
     t = np.transport(b)@np.linalg.inv(np.transpose(A)@A)@b
     return(t)
 
-def guassian_transport(u,A,w):
+def gaussian_transport(u,A,w):
     u = torch.tensor(u)
     A = torch.tensor(A)
     w = torch.tensor(w)
