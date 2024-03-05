@@ -1,7 +1,7 @@
 import torch
 import torch.optim as optim
 
-def train (ICNNf, ICNNg, dataloader, epochs = 100, train_freq_g = 10):
+def train_makkuva(ICNNf, ICNNg, dataloader, epochs = 100, train_freq_g = 10):
 
     # Define the loss function and the optimizer
     optimizer_f = optim.Adam(ICNNf.parameters(), lr = 0.001)
