@@ -11,8 +11,7 @@ def get_dataloader(d = 2, r = 100, N = 500, batch_size = 50):
 
     # simulate the gaussian
     X = torch.tensor(stats.norm.rvs(loc=0, scale=1, size=(N, r, d)), dtype=torch.float32)
-    #locs = torch.randint(-10, 11, (N,), dtype=torch.float32).repeat_interleave(r).view(N, r)
-    locs = torch.randint(1, 2, (N,), dtype=torch.float32).repeat_interleave(r).view(N, r)
+    locs = torch.randint(-5, 5, (N,), dtype=torch.float32).repeat_interleave(r).view(N, r) + torch.tensor(stats.norm.rvs(loc=0, scale=1, size=(N, r, d)), dtype=torch.float32)
 
     scales = 5*torch.rand(N, dtype=torch.float32).repeat_interleave(r).view(N, r)
     scales = torch.ones(N, r)
@@ -28,3 +27,22 @@ def get_dataloader(d = 2, r = 100, N = 500, batch_size = 50):
     batch_size = batch_size
     dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
     return dataloader, locs, scales
+
+def generate_gaussian_dataset(d = 2, r = 100, N = 500) :
+    X = torch.tensor(stats.norm.rvs(loc=0, scale=1, size=(N, r, d)), dtype=torch.float32) 
+    
+    locs = torch.randint(-3, 3, (N,), dtype=torch.float32).repeat_interleave(r).view(N, r) 
+    locs = locs + torch.tensor(stats.norm.rvs(loc=0, scale=1, size=(N, r)), dtype=torch.float32) #bruit gaussien
+    
+    scales = torch.abs(torch.tensor(stats.norm.rvs(loc=0.9, scale=1, size=(N, r)), dtype=torch.float32)) + 0.1
+
+    locs2D = locs.unsqueeze(-1).expand(-1, -1, d)
+    scales2D = scales.unsqueeze(-1).expand(-1, -1, d)
+
+    Y = torch.tensor(stats.norm.rvs(loc=locs2D, scale=scales2D, size=(N, r, d)), dtype=torch.float32)
+
+    C = torch.stack((locs, scales), dim = 2)
+
+    dataset = MyDataset(X, C, Y)
+
+    return(dataset)
