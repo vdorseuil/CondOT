@@ -19,9 +19,6 @@ class ICNNet(nn.Module):
         self.layers_u = nn.ModuleList([nn.Linear(context_layer_sizes[i], layer_sizes[i+1]) for i in range(self.n_layers-1)])
 
         self.layers_v = nn.ModuleList([nn.Sequential(nn.Linear(context_layer_sizes[i], context_layer_sizes[i+1]), nn.ReLU()) for i in range(self.n_layers-1)])
-        
-        self.layers_bn_z = nn.ModuleList([nn.BatchNorm1d(layer_sizes[i+1]) for i in range(self.n_layers-1)])
-        self.layers_bn_u = nn.ModuleList([nn.BatchNorm1d(context_layer_sizes[i+1]) for i in range(self.n_layers-1)])
 
         for layer in self.layers_z:
             nn.init.xavier_uniform_(layer.weight)
@@ -61,20 +58,5 @@ class ICNNet(nn.Module):
                 z = self.layers_activation[i](self.layers_z[i](z * self.layers_zu[i](u)) + self.layers_x[i](input * self.layers_xu[i](u)) + self.layers_u[i](u))
                 u = self.layers_v[i](u)
             
-
-            # z_shape = z.shape
-            # z = z.view(-1, z.shape[-1])
-            # # Apply batch normalization
-            # z = self.layers_bn_z[i](z)
-            # # Reshape accordingly
-            # z = z.view(z_shape)
-
-            # u_shape = u.shape
-            # u = u.view(-1, u.shape[-1])
-            # # Apply batch normalization
-            # u = self.layers_bn_u[i](u)
-            # # Reshape accordingly
-            # u = u.view(u_shape)
-
         return z
 #How are the parameters initialize ?
