@@ -1,10 +1,7 @@
 from mydataset import MyDataset
 from torch.utils.data import Dataset, DataLoader
 import scipy.stats as stats
-
 import torch
-
-
 
 def get_dataloader(d = 2, r = 100, N = 500, batch_size = 50):
     d = d # dimension of the data
@@ -31,5 +28,3 @@ def get_dataloader(d = 2, r = 100, N = 500, batch_size = 50):
     batch_size = batch_size
     dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
     return dataloader, locs, scales
-
-
