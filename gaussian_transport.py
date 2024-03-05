@@ -42,4 +42,5 @@ def gaussian_transport(u,A,w):
     w = torch.tensor(w)
   
     vect = A@(u - w)
-    return ((1/2) * torch.dot(vect, vect) )
+
+    return ((1/2) * torch.dot(vect.real, vect.real) )
