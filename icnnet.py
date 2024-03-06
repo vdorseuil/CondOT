@@ -2,7 +2,7 @@ import torch.nn as nn
 import torch
 
 class ICNNet(nn.Module):
-    def __init__(self, input_size = 1, layer_sizes = [1,4,1], context_layer_sizes=[1,2,1]):
+    def __init__(self, input_size = 1, layer_sizes = [1,4,1], context_layer_sizes=[1,2,1], init_bunne = True):
         super(ICNNet, self).__init__()
         self.n_layers = len(layer_sizes)
 
@@ -19,32 +19,33 @@ class ICNNet(nn.Module):
         self.layers_u = nn.ModuleList([nn.Linear(context_layer_sizes[i], layer_sizes[i+1]) for i in range(self.n_layers-1)])
 
         self.layers_v = nn.ModuleList([nn.Sequential(nn.Linear(context_layer_sizes[i], context_layer_sizes[i+1]), nn.ReLU()) for i in range(self.n_layers-1)])
-
-        for layer in self.layers_z:
-            nn.init.xavier_uniform_(layer.weight)
-
-        for seq_layer in self.layers_zu:
-            for layer in seq_layer:
-                if isinstance(layer, nn.Linear):  # check if the layer is Linear
-                    nn.init.xavier_uniform_(layer.weight)
-                    nn.init.zeros_(layer.bias)
-
-        for layer in self.layers_x:
-            nn.init.xavier_uniform_(layer.weight)
         
-        for layer in self.layers_xu:
-            nn.init.xavier_uniform_(layer.weight)
-            nn.init.zeros_(layer.bias)
-         
-        for layer in self.layers_u:
-            nn.init.xavier_uniform_(layer.weight)
-            nn.init.zeros_(layer.bias)
-        
-        for seq_layer in self.layers_v:
-            for layer in seq_layer:
-                if isinstance(layer, nn.Linear):  # check if the layer is Linear
-                    nn.init.xavier_uniform_(layer.weight)
-                    nn.init.zeros_(layer.bias)
+        if init_bunne:
+            for layer in self.layers_z:
+                nn.init.xavier_uniform_(layer.weight)
+
+            for seq_layer in self.layers_zu:
+                for layer in seq_layer:
+                    if isinstance(layer, nn.Linear):  # check if the layer is Linear
+                        nn.init.xavier_uniform_(layer.weight)
+                        nn.init.zeros_(layer.bias)
+
+            for layer in self.layers_x:
+                nn.init.xavier_uniform_(layer.weight)
+            
+            for layer in self.layers_xu:
+                nn.init.xavier_uniform_(layer.weight)
+                nn.init.zeros_(layer.bias)
+            
+            for layer in self.layers_u:
+                nn.init.xavier_uniform_(layer.weight)
+                nn.init.zeros_(layer.bias)
+            
+            for seq_layer in self.layers_v:
+                for layer in seq_layer:
+                    if isinstance(layer, nn.Linear):  # check if the layer is Linear
+                        nn.init.xavier_uniform_(layer.weight)
+                        nn.init.zeros_(layer.bias)
 
     def forward(self, x, c):
         input = x
