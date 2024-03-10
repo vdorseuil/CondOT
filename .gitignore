@@ -3,3 +3,5 @@ condot/
 data/
 *.pyc
 bunne/
+
+trained_models/

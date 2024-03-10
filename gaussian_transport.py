@@ -43,4 +43,39 @@ def gaussian_transport(u,A,w):
   
     vect = A@(u - w)
 
-    return ((1/2) * torch.dot(vect.real, vect.real) )
+    return ((1/2) * torch.dot(vect.real, vect.real))
+
+def gaussian_transport_data(source, target, data) :
+    source.detach().numpy()
+    target.detach().numpy()
+    data.detach().numpy()
+    vect = torch.zeros_like(data)
+    for i in range(source.shape[0]):
+        mean_source = torch.mean(source[i], dim = 0)
+        mean_target = torch.mean(target[i], dim = 0)
+
+        cov_source = ((source[i]-mean_source).T @ (source[i] - mean_source)) / (source[i].shape[0] - 1)
+        cov_target = ((target[i]-mean_target).T @ (target[i] - mean_target)) / (target[i].shape[0] - 1)
+
+        mean_source = mean_source.detach().numpy()
+        mean_target = mean_target.detach().numpy()
+        cov_source = cov_source.detach().numpy()
+        cov_target = cov_target.detach().numpy()
+
+
+        A = compute_A(cov_source, cov_target)
+        w = compute_w(mean_source, mean_target, A)
+
+        A = torch.tensor(A)
+        w = torch.tensor(w)
+
+
+
+        for j in range(source[i].shape[0]) :
+            vect[i,j] = gaussian_transport(source[i][j], A, w)
+    
+        #vec = A@(data[i]- w)
+
+        #vect[i] = (1/2) * torch.dot(vec, vec)
+
+    return (vect)

@@ -55,7 +55,7 @@ def get_gaussian_transport_dataset(gaussian_dataset) :
     for i in range(X.shape[0]) :
         x_i = X[i]
         y_i = Y[i]
-
+        
         mean_x = torch.mean(x_i, dim = 0)
         cov_matrix_x = ((x_i-mean_x).T @ (x_i - mean_x)) / (x_i.shape[0] - 1)
 

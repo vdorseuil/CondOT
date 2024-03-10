@@ -7,13 +7,13 @@ class ICNNet(nn.Module):
         super(ICNNet, self).__init__()
         self.n_layers = len(layer_sizes)
 
-        self.layers_activation = nn.ModuleList([nn.Softplus() for _ in range(self.n_layers-1)])
+        self.layers_activation = nn.ModuleList([nn.LeakyReLU() for _ in range(self.n_layers-1)])
         self.layers_z = nn.ModuleList([nn.Linear(layer_sizes[i], layer_sizes[i+1], bias=False) for i in range(self.n_layers-1)]) #non zero entries in the matrix ?
         self.layers_zu = nn.ModuleList([nn.Sequential(nn.Linear(context_layer_sizes[i], layer_sizes[i]), nn.ReLU()) for i in range(self.n_layers-1)])
         self.layers_x = nn.ModuleList([nn.Linear(layer_sizes[0], layer_sizes[i+1], bias=False) for i in range(self.n_layers-1)])
         self.layers_xu = nn.ModuleList([nn.Linear(context_layer_sizes[i], z_0_size) for i in range(self.n_layers-1)])
         self.layers_u = nn.ModuleList([nn.Linear(context_layer_sizes[i], layer_sizes[i+1]) for i in range(self.n_layers-1)])
-        self.layers_v = nn.ModuleList([nn.Sequential(nn.Linear(context_layer_sizes[i], context_layer_sizes[i+1]), nn.ReLU()) for i in range(self.n_layers-1)])
+        self.layers_v = nn.ModuleList([nn.Sequential(nn.Linear(context_layer_sizes[i], context_layer_sizes[i+1]), nn.LeakyReLU()) for i in range(self.n_layers-1)])
         
         if init_bunne == True :
             for layer in self.layers_z:
