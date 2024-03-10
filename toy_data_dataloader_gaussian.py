@@ -63,18 +63,17 @@ def generate_dataset(d = 2, r = 100, N = 500) :
 
 
     ### complex init
-    # mean_1 = torch.randint(2, 3, (N,2)) #moyenne de la première des deux distributions
-    # mean_2 = torch.randint(-2, -1, (N,2))
-    #cov_1 = [torch.tensor([[np.cos(theta1[i]), -np.sin(theta1[i])], [np.sin(theta1[i]), np.cos(theta1[i])]]) for i in range(N)]
-    #cov_1 = torch.tensor(stats.uniform.rvs(-1, 1, size=(N,2,2)))
-    #cov_1 = [cov_1[i]@cov_1[i].T for i in range(N)]
-    #cov_2 = [torch.tensor([[np.cos(theta2[i]), -np.sin(theta2[i])], [np.sin(theta2[i]), np.cos(theta2[i])]]) for i in range(N)]
-    #cov_2 = torch.tensor(stats.uniform.rvs(-1, 1, size=(N,2,2)))
-    #cov_2 = [cov_2[i]@cov_2[i].T for i in range(N)]
+
+    mean_1 = torch.randint(1, 3, (N,2)) #moyenne de la première des deux distributions
+    mean_2 = torch.randint(1, 3, (N,2))
+    cov_1 = torch.tensor(stats.uniform.rvs(-1, 1, size=(N,2,2)))
+    cov_1 = [cov_1[i]@cov_1[i].T for i in range(N)]
+    cov_2 = torch.tensor(stats.uniform.rvs(-1, 1, size=(N,2,2)))
+    cov_2 = [cov_2[i]@cov_2[i].T for i in range(N)]
 
     # cov_1_flatten = cov_1.view(N,4)
     # cov_2_flatten = cov_2.view(N,4)
-    # C = torch.cat([mean_1, torch.stack(cov_1), mean_2, torch.stack(cov_2)], dim=1)
+    C = torch.cat([mean_1, torch.stack(cov_1).view(N,-1), mean_2, torch.stack(cov_2).view(N,-1)], dim=1)
     
     Y = [torch.concat([torch.tensor(stats.multivariate_normal.rvs(mean=mean_1[i], cov=cov_1[i], size = r)),torch.tensor(stats.multivariate_normal.rvs(mean=mean_2[i], cov=cov_2[i], size = r))]) for i in range(N)]
     Y = torch.stack(Y)
