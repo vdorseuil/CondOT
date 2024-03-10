@@ -45,16 +45,16 @@ def generate_gaussian_dataset(d = 2, r = 100, N = 500) :
     return(dataset)
 
 def generate_dataset(d = 2, r = 100, N = 500) :
-    mean_1 = torch.tensor([1,1], dtype=torch.float32).repeat(N,1)
-    mean_2 = torch.tensor([1,1], dtype=torch.float32).repeat(N,1)
+    mean_1 = torch.tensor([0,0], dtype=torch.float32).repeat(N,1)
+    mean_2 = torch.tensor([0,0], dtype=torch.float32).repeat(N,1)
     cov_1 = [0.2*torch.tensor(np.eye(d)) for i in range(N)]
     cov_2 = [0.2*torch.tensor(np.eye(d)) for i in range(N)]
     X = [torch.concat([torch.tensor(stats.multivariate_normal.rvs(mean=mean_1[i], cov=cov_1[i], size = r)),torch.tensor(stats.multivariate_normal.rvs(mean=mean_2[i], cov=cov_2[i], size = r))]) for i in range(N)]
     X = torch.stack(X)
 
     ### init facile
-    mean_1 = torch.tensor([3,3], dtype=torch.float32).repeat(N,1)
-    mean_2 = torch.tensor([3,3], dtype=torch.float32).repeat(N,1)
+    mean_1 = torch.tensor([2,0], dtype=torch.float32).repeat(N,1)
+    mean_2 = torch.tensor([0,2], dtype=torch.float32).repeat(N,1)
 
     cov_1 = [0.2*torch.tensor(np.eye(d)) for i in range(N)]
     cov_2 = [0.2*torch.tensor(np.eye(d)) for i in range(N)]
@@ -85,4 +85,3 @@ def generate_dataset(d = 2, r = 100, N = 500) :
 
     dataset = MyDataset(X.float(), C.float(), Y.float())
     return(dataset)
-

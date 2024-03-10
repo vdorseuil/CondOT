@@ -87,10 +87,7 @@ def train_makkuva_epoch(ICNNf, ICNNg, old_ICNNf, old_ICNNg, dataloader, init_z_f
     cpt_g = 0
 
     #train_freq_g = np.random.randint(1, train_freq_g+1)
-    print('train_freq_g', train_freq_g)
-
     #train_freq_f = np.random.randint(1, train_freq_f+1)
-    print('train_freq_f', train_freq_f)
 
     for freq in range(train_freq_g) :
         for x, c, y in dataloader:
@@ -103,9 +100,7 @@ def train_makkuva_epoch(ICNNf, ICNNg, old_ICNNf, old_ICNNg, dataloader, init_z_f
             c.requires_grad_(True)
 
             if gaussian_transport == True :
-                print('ok')
                 z_0 = gaussian_transport_data(source=y, target=x, data=y)
-                print('ok2')
             else : 
                 z_0 = init_z_g(y)
 

@@ -25,8 +25,8 @@ def plot_distribution(source_distribution, target_distribution, transported_dist
     plt.title('Trained transport map using Makkuva\'s method')
     plt.legend(loc='lower center', ncol=3, fontsize='small')
 
-    plt.xlim(-1, 5)
-    plt.ylim(-1, 5) 
+    plt.xlim(-2, 4)
+    plt.ylim(-2, 4) 
     plt.grid(True)
 
     plt.tight_layout()
