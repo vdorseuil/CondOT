@@ -1,6 +1,7 @@
 import torch.nn as nn
 from torch.nn import init
 import torch
+from gaussian_transport import gaussian_transport_data
 
 class ICNNet(nn.Module):
     def __init__(self, z_0_size = 1, layer_sizes = [1,4,1], context_layer_sizes=[1,2,1], init_bunne = True):
@@ -47,7 +48,6 @@ class ICNNet(nn.Module):
             for i in range(self.n_layers-1):
                 init.constant_(self.layers_z[i].weight, 1.0 / layer_sizes[i])
 
-
                 #init.constant_(self.layers_x[i].weight, 1)
                 #init.constant_(self.layers_xu[i].weight, 1)
 
@@ -76,3 +76,11 @@ class ICNNet(nn.Module):
                 z = self.layers_activation[i](self.layers_z[i](z * self.layers_zu[i](u)) + self.layers_x[i](input * self.layers_xu[i](u)) + self.layers_u[i](u))
                 u = self.layers_v[i](u)
         return z
+    
+def compute_grad(source, target, context, model):
+    source.requires_grad_(True)
+    context.requires_grad_(True)
+    z_0 = gaussian_transport_data(source = source.clone().detach().numpy(), target = target.clone().detach().numpy(), data = source.clone().detach().numpy())
+    output_model = model(source, context, z_0)
+    grad_model = torch.autograd.grad(outputs=output_model, inputs=source, grad_outputs=torch.ones_like(output_model), create_graph=True)[0].detach().numpy()
+    return grad_model

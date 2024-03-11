@@ -1,15 +1,12 @@
 import torch
 import matplotlib.pyplot as plt
-
-def compute_grad(source, context, model, init_z = lambda x: (1/2) * torch.norm(x, dim=-1, keepdim=True)**2):
-    source.requires_grad_(True)
-    context.requires_grad_(True)
-    z_0 = init_z(source)
-    output_model = model(source, context, z_0)
-    grad_model = torch.autograd.grad(outputs=output_model, inputs=source, grad_outputs=torch.ones_like(output_model), create_graph=True)[0].detach().numpy()
-    return grad_model
+from icnnet import compute_grad
 
 def plot_distribution(source_distribution, target_distribution, transported_distribution, filename):
+    source_distribution = source_distribution.squeeze()
+    target_distribution = target_distribution.squeeze()
+    transported_distribution = transported_distribution.squeeze()
+
     plt.scatter(source_distribution[:, 0], source_distribution[:, 1], alpha=0.3, label='source distribution', edgecolors='none')
     plt.scatter(target_distribution[:, 0], target_distribution[:, 1], color='orange', alpha=0.3, label='target distribution', edgecolors='none')
     plt.scatter(transported_distribution[:, 0], transported_distribution[:, 1], alpha=0.3, color='green', label='transported distribution', edgecolors='none')
@@ -31,15 +28,18 @@ def plot_distribution(source_distribution, target_distribution, transported_dist
 
     plt.tight_layout()
     plt.rcParams['figure.dpi'] = 200
-    plt.savefig(filename)
+
+    plt.show()
+
+    #plt.savefig(filename)
     plt.clf()
     #plt.show()
 
 def plot_transport(dataset, test, model_f, model_g, filename_f, filename_g, n_points=1000) :
-    x_i, y_i, c_i = dataset.X[test, :n_points, :], dataset.Y[test, :n_points, :], dataset.C[test, :n_points, :]
+    x_i, y_i, c_i = dataset.X[test, :n_points, :].unsqueeze(0), dataset.Y[test, :n_points, :].unsqueeze(0), dataset.C[test, :n_points, :].unsqueeze(0)
 
-    grad_model_f = compute_grad(x_i, c_i, model_f)
-    grad_model_g = compute_grad(y_i, c_i, model_g)
+    grad_model_f = compute_grad(x_i, y_i, c_i, model_f)
+    grad_model_g = compute_grad(y_i, x_i, c_i, model_g)
 
     x_i = x_i.detach().numpy()
     y_i = y_i.detach().numpy()

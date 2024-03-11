@@ -64,12 +64,12 @@ def generate_dataset(d = 2, r = 100, N = 500) :
 
     ### complex init
 
-    mean_1 = torch.randint(1, 3, (N,2)) #moyenne de la première des deux distributions
-    mean_2 = torch.randint(1, 3, (N,2))
-    cov_1 = torch.tensor(stats.uniform.rvs(-1, 1, size=(N,2,2)))
-    cov_1 = [cov_1[i]@cov_1[i].T for i in range(N)]
-    cov_2 = torch.tensor(stats.uniform.rvs(-1, 1, size=(N,2,2)))
-    cov_2 = [cov_2[i]@cov_2[i].T for i in range(N)]
+    # mean_1 = torch.randint(1, 3, (N,2)) #moyenne de la première des deux distributions
+    # mean_2 = torch.randint(1, 3, (N,2))
+    # cov_1 = torch.tensor(stats.uniform.rvs(-1, 1, size=(N,2,2)))
+    # cov_1 = [cov_1[i]@cov_1[i].T for i in range(N)]
+    # cov_2 = torch.tensor(stats.uniform.rvs(-1, 1, size=(N,2,2)))
+    # cov_2 = [cov_2[i]@cov_2[i].T for i in range(N)]
 
     # cov_1_flatten = cov_1.view(N,4)
     # cov_2_flatten = cov_2.view(N,4)
