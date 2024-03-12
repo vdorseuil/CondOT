@@ -53,18 +53,19 @@ def generate_dataset(d = 2, r = 100, N = 500) :
     X = torch.stack(X)
 
     ### init facile
-    mean_1 = torch.tensor([2,0], dtype=torch.float32).repeat(N,1)
-    mean_2 = torch.tensor([0,2], dtype=torch.float32).repeat(N,1)
+    mean_1 = torch.tensor([1,3], dtype=torch.float32).repeat(N,1)
+    mean_2 = torch.tensor([3,1], dtype=torch.float32).repeat(N,1)
 
-    cov_1 = [0.2*torch.tensor(np.eye(d)) for i in range(N)]
-    cov_2 = [0.2*torch.tensor(np.eye(d)) for i in range(N)]
+    cov_1 = [0.1*torch.tensor(np.eye(d)) for i in range(N)]
+    cov_2 = [0.1*torch.tensor(np.eye(d)) for i in range(N)]
     
     C = torch.cat([mean_1], dim=1) 
 
 
     ### complex init
 
-    # mean_1 = torch.randint(1, 3, (N,2)) #moyenne de la première des deux distributions
+    # mean_1 = torch.randint(2, 4, (N,2)) #moyenne de la première des deux distributions
+    # mean_2 = mean_1.clone() #moyenne de la deuxième des deux distributions
     # mean_2 = torch.randint(1, 3, (N,2))
     # cov_1 = torch.tensor(stats.uniform.rvs(-1, 1, size=(N,2,2)))
     # cov_1 = [cov_1[i]@cov_1[i].T for i in range(N)]

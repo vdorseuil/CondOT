@@ -1,9 +1,10 @@
 import torch.nn as nn
 import torch.optim as optim
 import torch
-from gaussian_transport import gaussian_transport_data
+import matplotlib.pyplot as plt
 
-def PICNNtrain(model, dataloader, lr=0.001, epochs=50):
+
+def PICNNtrain(model, dataloader, init_z, lr=0.001, epochs=50):
     # Define the loss function and the optimizer
     criterion = nn.MSELoss()
     optimizer = optim.Adam(model.parameters(), lr=lr)
@@ -16,14 +17,14 @@ def PICNNtrain(model, dataloader, lr=0.001, epochs=50):
             c_batch.requires_grad_(True)
             optimizer.zero_grad() # Zero the gradients
             
-
+            #z_0 = gaussian_transport_data(x_batch.clone().detach().numpy(), y_batch.clone().detach().numpy(), x_batch.clone().detach().numpy())
             #z_0 = init_z(x_batch)
-            z_0 = gaussian_transport_data(x_batch.clone().detach().numpy(), y_batch.clone().detach().numpy(), x_batch.clone().detach().numpy())
-
-            output = model(x_batch, c_batch, z_0)  # Assuming context c is same as input x
+            output = model(x_batch, c_batch, init_z)  # Assuming context c is same as input x
 
             loss = criterion(output, y_batch) # Compute the loss
             loss.backward() # Backward pass
+
+            #print(y_batch[:,:,0][0], output[:,:,0][0])
 
             optimizer.step() # Update the parameters
 

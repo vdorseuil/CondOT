@@ -1,6 +1,6 @@
 from torch.utils.data import Dataset, DataLoader
 from scipy.stats import multivariate_normal
-from gaussian_transport import compute_A, compute_w, gaussian_transport
+from gaussian_transport import compute_A, compute_w, gaussian_transport, get_gaussian_transport
 import torch
 
 class MyDataset(Dataset):
@@ -44,14 +44,11 @@ def get_gaussian_dataset(dataset) :
     return(gaussian_dataset)
 
 def get_gaussian_transport_dataset(gaussian_dataset) :
-    X = gaussian_dataset.X
-    C = gaussian_dataset.C
-    Y = gaussian_dataset.Y
+    X = gaussian_dataset.X.clone()
+    C = gaussian_dataset.C.clone()
+    Y = gaussian_dataset.Y.clone()
 
-    X_transport = torch.ones_like(gaussian_dataset.X)
-    C_transport = torch.ones_like(gaussian_dataset.C)
-    Y_transport = torch.ones_like(gaussian_dataset.Y)
-
+    l_transported = []
     for i in range(X.shape[0]) :
         x_i = X[i]
         y_i = Y[i]
@@ -62,15 +59,18 @@ def get_gaussian_transport_dataset(gaussian_dataset) :
         mean_y = torch.mean(y_i, dim = 0)
         cov_matrix_y = ((y_i-mean_y).T @ (y_i - mean_y)) / (y_i.shape[0] - 1)
 
-        A = compute_A(cov_matrix_x, cov_matrix_y)
-        w = compute_w(mean_x, mean_y, A)
+        l_transported.append(get_gaussian_transport(X[i].unsqueeze(0), cov_matrix_x, cov_matrix_y, mean_x, mean_y)[0])
+        # for j in range(x_i.shape[0]) :
+        #     #print(x_i[j].shape, A.shape, w.shape)
+        #     Y_transport[i,j] = gaussian_transport(x_i[j], A, w)
+        #     #print(Y_transport[i,j].shape)
+        #     #print(x_i[j], A, w, Y_transport[i,j])
 
-        for j in range(x_i.shape[0]) :
-            Y_transport[i,j] = gaussian_transport(x_i[j], A, w)
-        
-        X_transport[i] = X[i]
-        C_transport[i] = C[i]
+    
+    Y_transport = torch.stack(l_transported, dim=0)
+    X_transport = X.clone()
+    C_transport = C.clone()
 
-        gaussian_transport_dataset = MyDataset(X_transport, C_transport, Y_transport)
+    gaussian_transport_dataset = MyDataset(X_transport, C_transport, Y_transport)
     
     return(gaussian_transport_dataset)

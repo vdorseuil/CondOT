@@ -43,18 +43,31 @@ def t(A,b):
     return(t)
 
 def gaussian_transport(u,A,w):
-    u = torch.tensor(u).float()
+    #u = torch.tensor(u).float()
     A = torch.tensor(A).float()
     w = torch.tensor(w).float()
-  
-    vect = A@(u - w)
 
-    return ((1/2) * torch.dot(vect.real, vect.real))
+
+    if len(u.shape) == 1:
+        vect = A@(u-w)
+        transported = (1/2) * torch.dot(vect.real, vect.real) #sum((A@(u-w))^2)
+    else : 
+        u_minus_w = u - w
+        vect = torch.einsum('ij,abj->abi', A, u_minus_w) #A@(u-w)
+        transported = (1/2) * torch.sum(vect.real * vect.real, dim=-1, keepdim=True) #sum((A@(u-w))^2)
+    return (transported)
+
+def get_gaussian_transport(u, cov1, cov2, m1, m2) :
+    A = compute_A(cov1, cov2)
+    w = compute_w(m1, m2, A)
+    return(gaussian_transport(u, A, w))
 
 def gaussian_transport_data(source, target, data) :
     source = torch.tensor(source)
     target = torch.tensor(target)
     data = torch.tensor(data)
+
+    print('source', source.shape)
 
     vect = torch.zeros_like(data)
     for i in range(source.shape[0]):
@@ -69,8 +82,6 @@ def gaussian_transport_data(source, target, data) :
         # cov_source = cov_source.detach().numpy()
         # cov_target = cov_target.detach().numpy()
 
-
-
         A = compute_A(cov_source, cov_target)
         w = compute_w(mean_source, mean_target, A)
 
@@ -80,8 +91,11 @@ def gaussian_transport_data(source, target, data) :
 
         for j in range(source[i].shape[0]) :
             vect[i,j] = gaussian_transport(source[i][j], A, w)
+            #print(A, w, source[i][j], vect[i,j])
+
     
         #vec = A@(data[i]- w)
-        #vect[i] = (1/2) * torch.dot(vec, vec)   
+        #vect[i] = (1/2) * torch.dot(vec, vec)
+        print('sortie', vect.shape)   
 
     return (vect)
