@@ -5,3 +5,5 @@ data/
 bunne/
 
 trained_models/
+
+python_env_cond/
