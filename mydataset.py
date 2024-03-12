@@ -2,7 +2,6 @@ from torch.utils.data import Dataset, DataLoader
 from scipy.stats import multivariate_normal
 from gaussian_transport import compute_A, compute_w, gaussian_transport, get_gaussian_transport
 import torch
-
 class MyDataset(Dataset):
     def __init__(self, X, C, Y):
         self.X = X

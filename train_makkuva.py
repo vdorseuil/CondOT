@@ -135,6 +135,7 @@ def train_makkuva_epoch(ICNNf, ICNNg, prev_param_f, prev_param_g, dataloader, in
                     if name[:9]=='layers_z.' :
                         R_g += torch.norm(torch.max(-simulated_parameters[name], torch.zeros_like(simulated_parameters[name])), p=2)
                         #R_f += torch.norm(torch.max(-param, torch.zeros_like(param)), p=2)
+                #print('R_g', R_g.item())
                 loss_g = loss_g + R_g
 
             #computing proximal term
@@ -142,6 +143,7 @@ def train_makkuva_epoch(ICNNf, ICNNg, prev_param_f, prev_param_g, dataloader, in
             if lambda_proximal > 0 and prev_param_f is not None:
                 for sim_param, prev_param in zip(param_simulated, prev_param_g):
                         proximal_term += (lambda_proximal / 2) * torch.norm(sim_param - prev_param)**2
+                #print('proximal_term', proximal_term.item())
                 loss_g = loss_g + proximal_term
 
             optimizer_g.zero_grad() # Zero the gradients

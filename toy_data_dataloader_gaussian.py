@@ -53,11 +53,11 @@ def generate_dataset(d = 2, r = 100, N = 500) :
     X = torch.stack(X)
 
     ### init facile
-    mean_1 = torch.tensor([1,3], dtype=torch.float32).repeat(N,1)
-    mean_2 = torch.tensor([3,1], dtype=torch.float32).repeat(N,1)
+    mean_1 = torch.tensor([2,2], dtype=torch.float32).repeat(N,1)
+    mean_2 = torch.tensor([2,2], dtype=torch.float32).repeat(N,1)
 
-    cov_1 = [0.1*torch.tensor(np.eye(d)) for i in range(N)]
-    cov_2 = [0.1*torch.tensor(np.eye(d)) for i in range(N)]
+    cov_1 = [0.2*torch.tensor(np.eye(d)) for i in range(N)]
+    cov_2 = [0.2*torch.tensor(np.eye(d)) for i in range(N)]
     
     C = torch.cat([mean_1], dim=1) 
 
@@ -79,7 +79,7 @@ def generate_dataset(d = 2, r = 100, N = 500) :
     Y = [torch.concat([torch.tensor(stats.multivariate_normal.rvs(mean=mean_1[i], cov=cov_1[i], size = r)),torch.tensor(stats.multivariate_normal.rvs(mean=mean_2[i], cov=cov_2[i], size = r))]) for i in range(N)]
     Y = torch.stack(Y)
 
-    #Y = torch.abs(Y-mean_1.unsqueeze(1).expand(-1, 2*r, -1)) + mean_1.unsqueeze(1).expand(-1, 2*r, -1)
+    Y = torch.abs(Y-mean_1.unsqueeze(1).expand(-1, 2*r, -1)) + mean_1.unsqueeze(1).expand(-1, 2*r, -1)
 
     C = C.unsqueeze(1).repeat(1, 2*r, 1)
 
