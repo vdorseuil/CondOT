@@ -12,13 +12,13 @@ def plot_distribution(source_distribution, target_distribution, transported_dist
     target_distribution = target_distribution.detach().numpy()
     transported_distribution = transported_distribution.detach().numpy()
 
-    plt.scatter(source_distribution[:, 0], source_distribution[:, 1], alpha=0.3, label='source distribution', edgecolors='none')
-    plt.scatter(target_distribution[:, 0], target_distribution[:, 1], color='orange', alpha=0.3, label='target distribution', edgecolors='none')
-    plt.scatter(transported_distribution[:, 0], transported_distribution[:, 1], alpha=0.3, color='green', label='transported distribution', edgecolors='none')
+    plt.scatter(source_distribution[:, 0], source_distribution[:, 1], alpha=0.1, label='source distribution', edgecolors='none')
+    plt.scatter(target_distribution[:, 0], target_distribution[:, 1], color='orange', alpha=0.1, label='target distribution', edgecolors='none')
+    plt.scatter(transported_distribution[:, 0], transported_distribution[:, 1], alpha=0.1, color='green', label='transported distribution', edgecolors='none')
 
     for i in range(source_distribution[:, 0].shape[0]):
         t=1
-        plt.arrow(source_distribution[i, 0], source_distribution[i, 1], transported_distribution[i, 0] - source_distribution[i, 0], transported_distribution[i, 1] - source_distribution[i, 1], color='green', alpha=0.05, head_width=0.1, head_length=0.1, length_includes_head=True)
+        plt.arrow(source_distribution[i, 0], source_distribution[i, 1], transported_distribution[i, 0] - source_distribution[i, 0], transported_distribution[i, 1] - source_distribution[i, 1], color='green', alpha=0.01, head_width=0.1, head_length=0.1, length_includes_head=True)
         #plt.arrow(transported_distribution[i, 0], transported_distribution[i, 1], target_distribution[i, 0] - transported_distribution[i, 0], target_distribution[i, 1] - transported_distribution[i, 1], color='orange', alpha=0.25, head_width=0.1, head_length=0.1, length_includes_head=True)
 
         
@@ -27,8 +27,8 @@ def plot_distribution(source_distribution, target_distribution, transported_dist
     plt.title('Trained transport map using Makkuva\'s method')
     plt.legend(loc='lower center', ncol=3, fontsize='small')
 
-    plt.xlim(-2, 4)
-    plt.ylim(-2, 4) 
+    plt.xlim(-2, 6)
+    plt.ylim(-2, 6) 
     plt.grid(True)
 
     plt.tight_layout()
