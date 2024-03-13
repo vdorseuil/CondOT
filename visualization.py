@@ -24,7 +24,7 @@ def plot_distribution(source_distribution, target_distribution, transported_dist
         
     plt.xlabel('Dimension 1')
     plt.ylabel('Dimension 2')
-    plt.title('Trained transport map using Makkuva\'s method')
+    plt.title('Learned Transport Map using Makkuva\'s method')
     plt.legend(loc='lower center', ncol=3, fontsize='small')
 
     plt.xlim(-2, 6)

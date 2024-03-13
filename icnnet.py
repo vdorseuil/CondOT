@@ -43,7 +43,7 @@ class ICNNet(nn.Module):
                         nn.init.xavier_uniform_(layer.weight)
                         nn.init.zeros_(layer.bias)
         
-        eps = 1
+        eps = 1e-6
         if init_bunne == 'TR':
             for i in range(self.n_layers-1):
                 init.constant_(self.layers_z[i].weight, 1.0 / layer_sizes[i])

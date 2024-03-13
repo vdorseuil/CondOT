@@ -78,7 +78,7 @@ def train_makkuva(ICNNf, ICNNg, dataloader, epochs = 100, train_freq_g = 10, reg
             
         print(f"Epoch {epoch+1}/{epochs} loss_g: {loss_g.item()}, loss_f: {loss_f.item()}")
     
-def train_makkuva_epoch(ICNNf, ICNNg, prev_param_f, prev_param_g, dataloader, init_z_f, init_z_g, lr=0.0001, train_freq_g = 10, train_freq_f = 1, regularize_g = False, regularize_f = False, lambda_proximal = 0) :
+def train_makkuva_epoch(ICNNf, ICNNg, prev_param_f, prev_param_g, dataloader, init_z_f, init_z_g, lr=0.0001, train_freq_g = 10, train_freq_f = 1, regularize_g = True, regularize_f = True, lambda_proximal = 0) :
     # Define the loss function and the optimizer
     optimizer_f = optim.SGD(ICNNf.parameters(), lr = lr)
     optimizer_g = optim.SGD(ICNNg.parameters(), lr = lr)
@@ -147,6 +147,7 @@ def train_makkuva_epoch(ICNNf, ICNNg, prev_param_f, prev_param_g, dataloader, in
                 loss_g = loss_g + proximal_term
 
             optimizer_g.zero_grad() # Zero the gradients
+            print(loss_g.item())
             loss_g.backward() # Backward pass
             optimizer_g.step()
 
