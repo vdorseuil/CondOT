@@ -51,5 +51,6 @@ def plot_transport(dataset, test, model_f, model_g, init_z_f, init_z_g, filename
 
     #x_i = x_i.detach().numpy()
     #y_i = y_i.detach().numpy()
+    
     plot_distribution(source_distribution=x_i, target_distribution=y_i, transported_distribution=grad_model_f, filename=filename_f)
     plot_distribution(source_distribution=y_i, target_distribution=x_i, transported_distribution=grad_model_g, filename=filename_g)

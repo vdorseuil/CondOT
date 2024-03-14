@@ -87,3 +87,26 @@ def generate_dataset(d = 2, r = 100, N = 500) :
 
     dataset = MyDataset(X.float(), C.float(), Y.float())
     return(dataset)
+
+def generate_traj(d = 2, r = 100, N=500) :
+    mean_init = torch.tensor([0,0], dtype=torch.float32)
+    cov_init = 0.2*torch.tensor(np.eye(d))
+
+    l_X = [torch.tensor(stats.multivariate_normal.rvs(mean=mean_init, cov=mean_init, size = r))]
+
+    C = torch.tensor(np.random.choice([1, -1], size=N-1, p=[0.5, 0.5]))
+
+    distrib = torch.distributions.Exponential(100)
+
+    for i in range(1, N) :
+        l_X.append(l_X[i-1] + C[i-1] * distrib.sample((r,2)))
+
+    X = torch.stack(l_X[:-1])
+    Y = torch.stack(l_X[1:])   
+
+    print(X)
+
+    C = torch.tensor(np.random.choice([1, -1], size=N, p=[0.5, 0.5])).unsqueeze(1).repeat(1, r)
+
+    dataset = MyDataset(X.float(), C.float(), Y.float())
+    return(dataset)
