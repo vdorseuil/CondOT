@@ -35,12 +35,10 @@ def plot_distribution(source_distribution, target_distribution, transported_dist
     plt.rcParams['figure.dpi'] = 100
 
     plt.savefig(filename)
-    #plt.show()
     plt.clf()
-    #plt.show()
 
-def plot_transport(dataset, test, model_f, model_g, init_z_f, init_z_g, filename_f, filename_g, n_points=1000) :
-    x_i, y_i, c_i = dataset.X[test, :n_points, :].unsqueeze(0), dataset.Y[test, :n_points, :].unsqueeze(0), dataset.C[test, :n_points, :].unsqueeze(0)
+def plot_transport(dataset, test, model_f, model_g, init_z_f, init_z_g, filename_f, filename_g) :
+    x_i, y_i, c_i = dataset.X[test, :, :].unsqueeze(0), dataset.Y[test, :, :].unsqueeze(0), dataset.C[test, :, :].unsqueeze(0)
 
     x_i = x_i.requires_grad_(True)
     y_i = y_i.requires_grad_(True)
@@ -49,8 +47,6 @@ def plot_transport(dataset, test, model_f, model_g, init_z_f, init_z_g, filename
     grad_model_f = compute_grad(source = x_i, context = c_i, model=model_f, init_z = init_z_f)
     grad_model_g = compute_grad(source = y_i, context = c_i, model=model_g, init_z = init_z_g)
 
-    #x_i = x_i.detach().numpy()
-    #y_i = y_i.detach().numpy()
-    
+
     plot_distribution(source_distribution=x_i, target_distribution=y_i, transported_distribution=grad_model_f, filename=filename_f)
     plot_distribution(source_distribution=y_i, target_distribution=x_i, transported_distribution=grad_model_g, filename=filename_g)

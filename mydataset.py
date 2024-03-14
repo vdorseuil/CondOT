@@ -15,9 +15,9 @@ class MyDataset(Dataset):
         return self.X[idx], self.C[idx], self.Y[idx]
     
 def get_gaussian_dataset(dataset) :
-    X = dataset.X
-    C = dataset.C
-    Y = dataset.Y
+    X = dataset.X.clone()
+    C = dataset.C.clone()
+    Y = dataset.Y.clone()
 
     X_gaussian = torch.ones_like(dataset.X)
     C_gaussian = torch.ones_like(dataset.C)
@@ -59,12 +59,6 @@ def get_gaussian_transport_dataset(gaussian_dataset) :
         cov_matrix_y = ((y_i-mean_y).T @ (y_i - mean_y)) / (y_i.shape[0] - 1)
 
         l_transported.append(get_gaussian_transport(X[i].unsqueeze(0), cov_matrix_x, cov_matrix_y, mean_x, mean_y)[0])
-        # for j in range(x_i.shape[0]) :
-        #     #print(x_i[j].shape, A.shape, w.shape)
-        #     Y_transport[i,j] = gaussian_transport(x_i[j], A, w)
-        #     #print(Y_transport[i,j].shape)
-        #     #print(x_i[j], A, w, Y_transport[i,j])
-
     
     Y_transport = torch.stack(l_transported, dim=0)
     X_transport = X.clone()
