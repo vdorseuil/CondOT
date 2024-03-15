@@ -3,8 +3,7 @@ by Thomas Robert, Valentin Dorseuil and Paul Janicot.
 Work done under the supervision of Rémi Flamary, during the course MAP588 - Emerging Topics in Machine Learning :  Optimal Transport for Machine Learning (OTML), at Ecole polytechnique.
 
 ## The project
-This project aims at reproducing CondOT method from Bunne, C., a nouvel method leveraging 
-This project uses the article from Bunne, C. about the supervised training of conditional Monge Maps and try to reproduce the experiments.
+This project aims at reproducing CondOT method proposed by Bunne, C., a nouvel algorithm leveraging neural network performances to learn conditional Monge maps.
 
 ## Usage
 Run the CondOT.ipynb. Please refer to the `requirements.txt` file for the list of dependencies.
