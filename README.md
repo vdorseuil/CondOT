@@ -13,4 +13,4 @@ Run the CondOT.ipynb. Please refer to the `requirements.txt` file for the list o
 This project is based on :
 - Bunne, C., Krause, A., & Cuturi, M. (2023). Supervised Training of Conditional Monge Maps. arXiv preprint [arXiv:2206.14262](https://arxiv.org/abs/2206.14262)
 - Ashok Vardhan Makkuva, Amirhossein Taghvaei, Sewoong Oh, Jason D. Lee. (2019). Optimal transport mapping via input convex neural networks. arXiv preprint [arXiv:1908.10962]([https://arxiv.org/abs/2206.14262](https://arxiv.org/abs/1908.10962))
-- 
+
